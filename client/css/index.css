@@ -1,0 +1,16 @@
+.outbound {
+    color:blue;
+}
+.inbound {
+    color: red;
+}
+
+.navbar-inverse .navbar-inner,.navbar-inner, .brand{
+    background-color: purple;
+    color: yellow;
+}
+.number {
+    padding: 4px;
+    cursor: pointer;
+    
+}

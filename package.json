@@ -1,0 +1,14 @@
+{
+  "name": "delt-raven",
+  "version": "1.0.2",
+  "description": "A webapp to send out messages for recruitment",
+  "main": "server.js",
+  "repository": "",
+  "author": "Gavin Colwell <gavin.colwell@uconn.edu>",
+  "dependencies": {
+    "async": "~0.2.8",
+    "express": "~3.2.4",
+    "socket.io": "~0.9.14",
+    "twilio": "~3.27.1"
+  }
+}

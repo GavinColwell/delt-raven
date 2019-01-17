@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" ng-app>
+  <head>
+    <title>Delt Recruitment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <style>
+      body {
+        padding-top: 60px;
+      }
+    </style>
+    <script>
+    
+      function ChatController($scope) {
+        var socket = io.connect();
+
+        $scope.messages = [];
+        $scope.roster = [];
+        $scope.numbers = [];
+        $scope.name = '';
+        $scope.text = '';
+        $scope.userNum = '';
+        $scope.showNum = "";
+
+        socket.on('connect', function () {
+          $scope.setName();
+        });
+
+        socket.on('message', function (msg) {
+          $scope.messages.push(msg);
+          $scope.$apply();
+        });
+
+        socket.on('userNumber',function (num){
+          console.log(num);
+          $scope.userNum = num;
+          $scope.$apply();
+        });
+        
+        socket.on("numbers",function (numbers){
+          $scope.numbers = numbers;
+          $scope.$apply();
+        });
+
+        $scope.send = function send() {
+          console.log('Sending message:', $scope.text);
+          socket.emit('message', {
+            body: $scope.text,
+            to: $scope.showNum,
+            from: $scope.userNum,
+            dir: "outbound"
+          });
+          $scope.text = '';
+        };
+        
+        $scope.setNum = function setNumber(number){
+          console.log("prev ",$scope.showNum);
+          $scope.showNum = number;
+        };
+        
+        $scope.isRightConvo = function(msg){
+          if ($scope.showNum == msg.to || $scope.showNum == msg.from || $scope.showNum == ""){
+            return true;
+          }
+          else {
+            return false;
+          }
+        };
+        
+        $scope.isInPhonebook = function(num){
+          let restrictedNums = [$scope.userNum];
+          return !restrictedNums.includes(num);
+        };
+        
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container" ng-controller="ChatController">
+      <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+          <div class="pull-right">
+            <a href="https://c9.io" class="brand">Delt Developement</a>
+          </div>
+        </div>
+      </div>
+      <div class="page-header">
+        <h1>Delt Raven</h1>
+        <h3>Your Number <em id="our-number"  ng-bind="userNum"></em></h3>
+        <script>
+        </script>
+      </div>
+      <div class="row">
+        <div class="span12">
+          <input type="text" name="filter" placeholder=' Search for Number' ng-model="search"/>
+        </div>
+        <div class="span3">
+          <ul class="nav nav-list well">
+            <li class="nav-header" ng-click="setNum('')">Local Users</li>
+            <li ng-click="showNum = ''">All</li>
+            <li class="number" ng-repeat="num in numbers | filter:search" ng-bind="num" ng-click="setNum(num)" ng-show="isInPhonebook(num)">
+            </li>
+          </ul>
+        </div>
+        <div class="span9">
+          <table class="table table-striped table-bordered">
+            <thead>
+              <tr>
+                <th ng-hide="showNum != ''" class="span2">From</th>
+                <th ng-hide="showNum != ''" class="span2">To</th>
+                <th ng-hide="showNum != ''"class="span7">Text</th>
+                <th ng-show="showNum != ''" class="span" ng-bind="showNum"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="msg in messages" ng-show="isRightConvo(msg)" class="message {{msg.dir}}" >
+                <td ng-hide="showNum != ''" class="span2" ng-bind="msg.from"></td>
+                <td ng-hide="showNum != ''" class="span2" ng-bind="msg.to"></td>
+                <td class="span7" ng-bind="msg.text"></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row controls" ng-show="showNum != ''">
+            <form ng-submit="send()">
+              <div class="input-append span7">
+                <input type="text" class="span6" ng-model="text" placeholder="Message">
+                <input type="submit" class="span1 btn btn-primary" value="Send" ng-disabled="!text">
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/angular.min.js"></script>
+  </body>
+</html>
