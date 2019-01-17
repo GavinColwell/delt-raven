@@ -7,7 +7,7 @@
   "author": "Gavin Colwell <gavin.colwell@uconn.edu>",
   "dependencies": {
     "async": "~0.2.8",
-    "express": "~3.2.4",
+    "express": ">=3.11.0",
     "socket.io": "~0.9.14",
     "twilio": "~3.27.1"
   }
