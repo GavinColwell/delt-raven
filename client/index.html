@@ -94,7 +94,7 @@
       </div>
       <div class="row">
         <div class="span12">
-          <input type="text" name="filter" placeholder=' Search for Number' ng-model="search"/>
+          <input  class="span3" type="text" name="filter" placeholder=' Search for Number' ng-model="search"/>
         </div>
         <div class="span3">
           <ul class="nav nav-list well">
@@ -105,27 +105,27 @@
           </ul>
         </div>
         <div class="span9">
-          <table class="table table-striped table-bordered">
+          <table>
             <thead>
               <tr>
                 <th ng-hide="showNum != ''" class="span2">From</th>
                 <th ng-hide="showNum != ''" class="span2">To</th>
-                <th ng-hide="showNum != ''"class="span7">Text</th>
-                <th ng-show="showNum != ''" class="span" ng-bind="showNum"></th>
+                <th ng-hide="showNum != ''"class="span5">Text</th>
+                <th ng-show="showNum != ''" class="span"><h3>Conversation with {{showNum}}</h3></th>
               </tr>
             </thead>
             <tbody>
               <tr ng-repeat="msg in messages" ng-show="isRightConvo(msg)" class="message {{msg.dir}}" >
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.from"></td>
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.to"></td>
-                <td class="span7" ng-bind="msg.text"></td>
+                <td class="span" ng-bind="msg.text"></td>
               </tr>
             </tbody>
           </table>
           <div class="row controls" ng-show="showNum != ''">
             <form ng-submit="send()">
-              <div class="input-append span7">
-                <input type="text" class="span6" ng-model="text" placeholder="Message">
+              <div class="input-append span9">
+                <input type="text" class="span8" ng-model="text" placeholder="Message">
                 <input type="submit" class="span1 btn btn-primary" value="Send" ng-disabled="!text">
               </div>
             </form>
