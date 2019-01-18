@@ -26,7 +26,6 @@
     padding:10px;
     border-radius:10px;
     margin: 5px;
-    width:75%;
 }
 
 .outbound > td > .msg-body {
@@ -37,6 +36,7 @@
 }
 
 .inbound > td > .msg-body {
+    float:left;
     color:black;
     background-color:#c7c7c7;
 }
