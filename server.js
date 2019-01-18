@@ -21,9 +21,15 @@ var router = express();
 var server = http.createServer(router);
 var io = socketio.listen(server);
 
-var twilioCreds = fs.readFileSync("account.creds","utf8").split("\n");
+var tc;
 
-var tc = twilio(twilioCreds[0], twilioCreds[1]);
+if (process.env.TW_ACCSID){
+  tc = twilio(process.env.TW_ACCSID,process.env.TW_AUTH);
+}
+else {
+  var twilioCreds = fs.readFileSync("account.creds","utf8").split("\n");
+  tc = twilio(twilioCreds[0], twilioCreds[1]);
+}
 
 
 router.use(express.static(path.resolve(__dirname, 'client')));
