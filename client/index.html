@@ -98,35 +98,35 @@
         </div>
         <div class="span3">
           <ul class="nav nav-list well">
-            <li class="nav-header" ng-click="setNum('')">Local Users</li>
-            <li ng-click="showNum = ''">All</li>
+            <li class="nav-header" ng-click="setNum('')">Conversations</li>
+            <li class="number" ng-click="showNum = ''">All (newest first)</li>
             <li class="number" ng-repeat="num in numbers | filter:search" ng-bind="num" ng-click="setNum(num)" ng-show="isInPhonebook(num)">
             </li>
           </ul>
         </div>
         <div class="span9">
-          <table>
+          <table ng-class="{'table': showNum == ''}">
             <thead>
               <tr>
-                <th ng-hide="showNum != ''" class="span2">From</th>
-                <th ng-hide="showNum != ''" class="span2">To</th>
-                <th ng-hide="showNum != ''"class="span5">Text</th>
+                <th ng-hide="showNum != ''" class="span2"><h3>From</h3></th>
+                <th ng-hide="showNum != ''" class="span2"><h3>To</h3></th>
+                <th ng-hide="showNum != ''"class="span5"><h3>Text</h3></th>
                 <th ng-show="showNum != ''" class="span"><h3>Conversation with {{showNum}}</h3></th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="msg in messages" ng-show="isRightConvo(msg)" class="message {{msg.dir}}" >
+              <tr ng-repeat="msg in messages" ng-show="isRightConvo(msg)" class="msg-row {{msg.dir}}" >
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.from"></td>
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.to"></td>
-                <td class="span" ng-bind="msg.text"></td>
+                <td class="span" ><div ng-class="{'msg-body': showNum != ''}" ng-bind="msg.text"></div></td>
               </tr>
             </tbody>
           </table>
           <div class="row controls" ng-show="showNum != ''">
             <form ng-submit="send()">
               <div class="input-append span9">
-                <input type="text" class="span8" ng-model="text" placeholder="Message">
-                <input type="submit" class="span1 btn btn-primary" value="Send" ng-disabled="!text">
+                <input type="text" class="span8" id="msg-input" ng-model="text" placeholder="Message">
+                <input type="submit" class="span1 btn btn-primary" id="send-btn" value="Send" ng-disabled="!text">
               </div>
             </form>
           </div>

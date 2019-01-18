@@ -10,7 +10,42 @@
     color: yellow;
 }
 .number {
-    padding: 4px;
+    font-size: 15pt;
+    padding: 5px;
     cursor: pointer;
     
+}
+
+.msg-body {
+    padding:10px;
+    border-radius:10px;
+    margin: 5px;
+    width:75%;
+}
+
+.outbound > td > .msg-body {
+    float:right;
+    background-color:#0088ff;
+    color:white;
+    text-align:right;
+}
+
+.inbound > td > .msg-body {
+    color:black;
+    background-color:#c7c7c7;
+}
+
+.nav-header {
+    font-size:12pt;
+}
+
+#msg-input {
+    border-radius: 10px;
+    padding:10px;
+    margin-right: 10px;
+}
+
+#send-btn {
+    border-radius: 10px;
+    padding:10px;
 }
