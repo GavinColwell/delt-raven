@@ -47,6 +47,8 @@ io.on('connection', function (socket) {
     tc.messages.each(function(m){
       numbers.add(m.to).add(m.from);
       let dir = m.direction.split("-")[0];
+      let dateSent = m.dateSent.getTime();
+      
       if (userNumber === '' && dir == 'outbound'){
         userNumber = m.from;
       }
@@ -54,7 +56,8 @@ io.on('connection', function (socket) {
         to: m.to,
         from: m.from,
         text: m.body,
-        dir: dir
+        dir: dir,
+        dateSent: dateSent 
       };
       socket.emit('message',data);
       socket.emit('numbers',Array.from(numbers));
