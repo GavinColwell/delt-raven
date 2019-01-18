@@ -29,6 +29,7 @@
         });
 
         socket.on('message', function (msg) {
+          console.log(msg.dateSent);
           $scope.messages.push(msg);
           $scope.$apply();
         });
@@ -74,6 +75,12 @@
           return !restrictedNums.includes(num);
         };
         
+        $scope.dateToStr = function(date) {
+          var d = new Date(date);
+          // returns Month DD YYYY HH:mm
+          return d.toString().slice(4,21);
+        };
+        
       }
     </script>
   </head>
@@ -115,10 +122,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="msg in messages" ng-show="isRightConvo(msg)" class="msg-row {{msg.dir}}" >
+              <tr ng-repeat="msg in messages | orderBy:'dateSent':!showNum" ng-show="isRightConvo(msg)" class="msg-row {{msg.dir}}" >
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.from"></td>
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.to"></td>
-                <td class="span" ><div ng-class="{'msg-body': showNum != ''}" ng-bind="msg.text"></div></td>
+                <td class="span" >
+                  <div ng-class="{'msg-body': showNum != ''}" ng-bind="msg.text"></div><small ng-bind="dateToStr(msg.dateSent)"></small>
+                </td>
               </tr>
             </tbody>
           </table>
