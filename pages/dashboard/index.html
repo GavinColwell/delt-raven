@@ -1,20 +1,21 @@
 <!doctype html>
 <html lang="en" ng-app>
   <head>
-    <title>Delt Recruitment</title>
+    <title>Delt Raven</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/bootstrap-responsive.min.css">
-    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/bootstrap-responsive.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="/socket.io/socket.io.js"></script>
     <style>
       body {
         padding-top: 60px;
       }
     </style>
     <script>
-    
+
       function ChatController($scope) {
-        var socket = io.connect();
+        var socket = io.connect("/dashboard");
 
         $scope.messages = [];
         $scope.roster = [];
@@ -24,12 +25,7 @@
         $scope.userNum = '';
         $scope.showNum = "";
 
-        socket.on('connect', function () {
-          $scope.setName();
-        });
-
         socket.on('message', function (msg) {
-          console.log(msg.dateSent);
           $scope.messages.push(msg);
           $scope.$apply();
         });
@@ -100,10 +96,8 @@
         </script>
       </div>
       <div class="row">
-        <div class="span12">
-          <input  class="span3" type="text" name="filter" placeholder=' Search for Number' ng-model="search"/>
-        </div>
         <div class="span3">
+          <input  class="span3" type="text" name="filter" placeholder=' Search for Number' ng-model="search"/>
           <ul class="nav nav-list well">
             <li class="nav-header" ng-click="setNum('')">Conversations</li>
             <li class="number" ng-click="showNum = ''">All (newest first)</li>
@@ -112,21 +106,21 @@
           </ul>
         </div>
         <div class="span9">
-          <table ng-class="{'table': showNum == ''}">
+          <table ng-class="{'table': showNum == ''}" class="convos">
             <thead>
               <tr>
-                <th ng-hide="showNum != ''" class="span2"><h3>From</h3></th>
-                <th ng-hide="showNum != ''" class="span2"><h3>To</h3></th>
-                <th ng-hide="showNum != ''"class="span5"><h3>Text</h3></th>
-                <th ng-show="showNum != ''" class="span"><h3>Conversation with {{showNum}}</h3></th>
+                <th ng-hide="showNum != ''" class="span2"><h3 class="convo-heading">From</h3></th>
+                <th ng-hide="showNum != ''" class="span2"><h3 class="convo-heading">To</h3></th>
+                <th ng-hide="showNum != ''"class="span5"><h3 class="convo-heading">Text</h3></th>
+                <th ng-show="showNum != ''" class="span"><h3 class="convo-heading">Conversation with {{showNum}}</h3></th>
               </tr>
             </thead>
-            <tbody>
+            <tbody style="display:block; overflow-y:scroll; height:50vh;">
               <tr ng-repeat="msg in messages | orderBy:'dateSent':!showNum" ng-show="isRightConvo(msg)" class="msg-row {{msg.dir}}" >
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.from"></td>
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.to"></td>
                 <td class="span" >
-                  <div ng-class="{'msg-body': showNum != ''}" ng-bind="msg.text"></div><small ng-bind="dateToStr(msg.dateSent)"></small>
+                  <div ng-class="{'msg-body': showNum != ''}" ng-bind="msg.text"></div><small ng-bind="dateToStr(msg.dateSent)" meta-timestamp='{{msg.dateSent}}'></small>
                 </td>
               </tr>
             </tbody>
@@ -142,9 +136,8 @@
         </div>
       </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="/js/jquery.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/angular.min.js"></script>
+    <script src="/public/js/jquery.min.js"></script>
+    <script src="/public/js/bootstrap.min.js"></script>
+    <script src="/public/js/angular.min.js"></script>
   </body>
 </html>

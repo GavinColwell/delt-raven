@@ -32,7 +32,8 @@ else {
 }
 
 
-router.use(express.static(path.resolve(__dirname, 'client')));
+router.use("/public",express.static(path.resolve(__dirname, 'public')));
+router.use("/",express.static(path.resolve(__dirname, 'pages')));
 
 var messages = [];
 
@@ -42,7 +43,9 @@ var numbers =  new Set();
 
 var userNumber = "";
 
-io.on('connection', function (socket) {
+io
+.of("/dashboard")
+.on('connection', function (socket) {
     
     tc.messages.each(function(m){
       numbers.add(m.to).add(m.from);
@@ -84,13 +87,30 @@ io.on('connection', function (socket) {
       console.log(`to ${msg.to} \t from ${msg.from} \t body \n${text}`);
     });
     
-  });
+});
 
-function broadcast(event, data) {
-  sockets.forEach(function (socket) {
-    socket.emit(event, data);
-  });
-}
+io
+.of("/blast")
+.on("connection", function(socket) {
+  if (userNumber == ""){
+    tc.message.each( (m) => {
+      if (userNumber == ""){
+        if (m.direction == "inbound") {
+          userNumber = m.to;
+        }
+        else {
+          userNumber = m.from;
+        }
+      }
+    });
+    socket.emit("userNumber",userNumber);
+  }
+  else {
+    socket.emit("userNumber",userNumber);
+  }
+
+});
+
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   var addr = server.address();

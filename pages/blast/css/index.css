@@ -1,0 +1,75 @@
+.outbound {
+    color:blue;
+}
+.inbound {
+    color: red;
+}
+
+.navbar-inverse .navbar-inner,.navbar-inner, .brand{
+    background-color: purple;
+    color: yellow;
+}
+.number {
+    font-size: 15pt;
+    padding: 7px;
+    cursor: pointer;
+    font-weight:bold;
+    border-bottom: 1px solid grey;
+    
+}
+
+.number:hover {
+    background-color:lightsteelblue;
+}
+
+.msg-body {
+    padding:10px;
+    border-radius:10px;
+    margin: 5px;
+}
+
+.outbound > td > .msg-body {
+    float:right;
+    background-color:#0088ff;
+    color:white;
+    text-align:right;
+}
+
+.inbound > td > .msg-body {
+    float:left;
+    color:black;
+    background-color:#c7c7c7;
+}
+
+.nav-header {
+    font-size:12pt;
+}
+
+#msg-input {
+    border-radius: 10px;
+    padding:10px;
+    margin-right: 10px;
+}
+
+#send-btn {
+    border-radius: 10px;
+    padding:10px;
+}
+
+.convo-heading {
+    margin-top: 0;
+    padding:0px;
+}
+th {
+    padding-top:4px;
+}
+
+.convos {
+    margin-top:-15px;
+}
+
+small {
+    color:grey;
+    margin-bottom:0;
+}
+

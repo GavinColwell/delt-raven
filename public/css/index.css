@@ -55,3 +55,21 @@
     border-radius: 10px;
     padding:10px;
 }
+
+.convo-heading {
+    margin-top: 0;
+    padding:0px;
+}
+th {
+    padding-top:4px;
+}
+
+.convos {
+    margin-top:-15px;
+}
+
+small {
+    color:grey;
+    margin-bottom:0;
+}
+
