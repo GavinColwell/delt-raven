@@ -84,6 +84,7 @@ io
       if (!text){
         return;
       }
+      // sendTextMsg(msg)
       console.log(`to ${msg.to} \t from ${msg.from} \t body \n${text}`);
     });
     
@@ -108,6 +109,20 @@ io
   else {
     socket.emit("userNumber",userNumber);
   }
+  
+  socket.on('message', function (msg) {
+    var text = String(msg.body || '');
+
+    if (!text){
+      return;
+    }
+    
+    // sendTextMsg(msg);
+    console.log(`to ${msg.to} \t from ${msg.from} \t body \n${text}`);
+    
+  });
+
+  
 
 });
 
@@ -116,3 +131,13 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   var addr = server.address();
   console.log("Chat server listening at", addr.address + ":" + addr.port);
 });
+
+function sendTextMsg(msg){
+  tc.messages.create({
+      to: msg.to,
+      from: msg.from,
+      body: msg.body
+    })
+    .then((m) => console.log(m.sid))
+    .done();
+}
