@@ -1,0 +1,14 @@
+# Credentials for Twilio
+*.creds
+
+# Node Dependencies
+node_modules/
+
+# Cloud9 config folder
+.c9/
+
+# Testing workspace
+test/
+
+# SSL certificates
+*pem

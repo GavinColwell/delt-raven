@@ -3,7 +3,7 @@
 //
 // A simple chat server using Socket.IO, Express, and Async.
 //
-var http = require('http');
+var https= require('https');
 var path = require('path');
 
 var async = require('async');
@@ -17,8 +17,15 @@ var fs = require("fs");
 // Creates a new instance of SimpleServer with the following options:
 //  * `port` - The HTTP port to listen on. If `process.env.PORT` is set, _it overrides this value_.
 //
+
+var options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem'),
+  passphrase: process.env.passphrase
+};
+
 var router = express();
-var server = http.createServer(router);
+var server = https.createServer(options, router);
 var io = socketio.listen(server);
 
 var tc;
