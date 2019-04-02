@@ -24,6 +24,9 @@
         $scope.text = '';
         $scope.userNum = '';
         $scope.showNum = "";
+        $scope.restrictedNums = [$scope.userNum];
+        
+        $scope.onlyInbound = false;
 
         socket.on('message', function (msg) {
           $scope.messages.push(msg);
@@ -31,13 +34,17 @@
         });
 
         socket.on('userNumber',function (num){
-          console.log(num);
           $scope.userNum = num;
           $scope.$apply();
         });
         
         socket.on("numbers",function (numbers){
           $scope.numbers = numbers;
+          $scope.$apply();
+        });
+        
+        socket.on("restrictedNum", function (num) {
+          $scope.restrictedNums.push(num);
           $scope.$apply();
         });
 
@@ -53,22 +60,40 @@
         };
         
         $scope.setNum = function setNumber(number){
-          console.log("prev ",$scope.showNum);
           $scope.showNum = number;
         };
         
         $scope.isRightConvo = function(msg){
           if ($scope.showNum == msg.to || $scope.showNum == msg.from || $scope.showNum == ""){
-            return true;
+            if ($scope.showNum == ''){
+              if ($scope.onlyInbound) {
+                 return msg.dir == "inbound"
+              }
+              else {
+                return true;
+              }
+            }
+            else {
+              return true;
+            }
+            
           }
           else {
             return false;
           }
         };
         
+        $scope.showConversation = function(msg) {
+          if (msg.dir == "inbound") {
+            $scope.setNum(msg.from);
+          }
+          else {
+            $scope.setNum(msg.to);
+          }
+        };
+        
         $scope.isInPhonebook = function(num){
-          let restrictedNums = [$scope.userNum];
-          return !restrictedNums.includes(num);
+          return !$scope.restrictedNums.includes(num);
         };
         
         $scope.dateToStr = function(date) {
@@ -106,6 +131,7 @@
           </ul>
         </div>
         <div class="span9">
+          <button ng-click="showInbound = !showInbound"></button>
           <table ng-class="{'table': showNum == ''}" class="convos">
             <thead>
               <tr>
@@ -116,7 +142,7 @@
               </tr>
             </thead>
             <tbody style="display:block; overflow-y:scroll; height:50vh;">
-              <tr ng-repeat="msg in messages | orderBy:'dateSent':!showNum" ng-show="isRightConvo(msg)" class="msg-row {{msg.dir}}" >
+              <tr ng-repeat="msg in messages | orderBy:'dateSent':!showNum" ng-show="isRightConvo(msg)" class="msg-row {{msg.dir}}"  ng-click="showConversation(msg)">
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.from"></td>
                 <td ng-hide="showNum != ''" class="span2" ng-bind="msg.to"></td>
                 <td class="span" >

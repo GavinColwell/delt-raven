@@ -52,8 +52,15 @@ io
       let dir = m.direction.split("-")[0];
       let dateSent = m.dateSent.getTime();
       
-      if (userNumber === '' && dir == 'outbound'){
-        userNumber = m.from;
+      if (userNumber === ''){
+        
+        if (dir == "outbound"){
+          userNumber = m.from;
+        }
+        else {
+          userNumber = m.to
+        }
+        socket.emit('userNumber',userNumber);
       }
       var data = {
         to: m.to,
@@ -64,7 +71,8 @@ io
       };
       socket.emit('message',data);
       socket.emit('numbers',Array.from(numbers));
-      socket.emit('userNumber',userNumber);
+
+      
       
     });
     
@@ -84,7 +92,7 @@ io
       if (!text){
         return;
       }
-      // sendTextMsg(msg)
+      sendTextMsg(msg,socket);
       console.log(`to ${msg.to} \t from ${msg.from} \t body \n${text}`);
     });
     
@@ -117,7 +125,7 @@ io
       return;
     }
     
-    // sendTextMsg(msg);
+    sendTextMsg(msg,socket);
     console.log(`to ${msg.to} \t from ${msg.from} \t body \n${text}`);
     
   });
@@ -132,12 +140,15 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
   console.log("Chat server listening at", addr.address + ":" + addr.port);
 });
 
-function sendTextMsg(msg){
+function sendTextMsg(msg,socket){
   tc.messages.create({
       to: msg.to,
       from: msg.from,
       body: msg.body
     })
-    .then((m) => console.log(m.sid))
+    .then((m) => {
+      console.log(m.sid);
+      socket.emit("messageSent",m.sid);
+    })
     .done();
 }

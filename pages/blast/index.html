@@ -32,14 +32,18 @@
       <div class="row">
         <strong class="span2">Phone Numbers</strong>
         <strong class="span2">Name</strong>
+        <strong class="span2">Sorority</strong>
+        <strong class="span6">Message body (use {name} and {sorority} to format the message)</strong>
         
       </div>
       <div class="row">
         
         <textarea id="num-field" name="num-field" class="span2"/></textarea>
-        <textarea id="names-field" name="names-field" class="span2"/></textarea>
-        <textarea id="msg-field" name="msg-field" class="span8"></textarea>
+        <textarea id="names-field" class="span2"/></textarea>
+        <textarea id="sorority-field" class="span2"/></textarea>
+        <textarea id="msg-field" name="msg-field" class="span6"></textarea>
         <button ng-click="test()">Test</button>
+        <button ng-disabled="!tested" ng-click="send()">Full Send</button>
       </div>
     </div>
     <script src="/public/js/jquery.min.js"></script>

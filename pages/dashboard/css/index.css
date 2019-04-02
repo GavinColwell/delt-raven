@@ -73,3 +73,6 @@ small {
     margin-bottom:0;
 }
 
+tbody {
+    width:60vw;
+}
